@@ -17,6 +17,11 @@
   color: #2c3e50;
 }
 
+// 隐藏vconsole按钮
+#__vconsole {
+  display: none;
+}
+
 #nav {
   padding: 30px;
 

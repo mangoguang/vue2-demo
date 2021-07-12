@@ -1,18 +1,24 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div @click="BA_testClick">埋点</div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+// import HelloWorld from '@/components/HelloWorld.vue';
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld,
+    // HelloWorld,
+  },
+  methods: {
+    BA_testClick() {
+      console.log('success!!!', this.$ba);
+      this.$ba.trackEvent('test', '新增', '收入', 100);
+    },
   },
 };
 </script>
