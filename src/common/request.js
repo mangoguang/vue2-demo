@@ -3,6 +3,7 @@ import axios from 'axios';
 import { localStorageKeys } from '@/common/constants';
 import { Toast } from 'vant';
 import store from '@/store';
+// import reload
 // import { toLoginPage } from './utils'
 const env = process.env.VUE_APP_ENV;
 const { baseURLMap } = require('../../resource.config');
@@ -41,6 +42,7 @@ instance.interceptors.response.use(
     return response.data;
   },
   (error) => {
+    console.log(111111111, error.config)
     store.commit('SET_LOADING_SHOW', false);
     const responseError = error.response;
     // console.log('请求失败', error, ':::', error.response)
@@ -49,6 +51,8 @@ instance.interceptors.response.use(
     Toast.fail(data.message);
     switch (status) {
       case 401:
+        // let {  } = error.config
+        reload()
         // toLoginPage()
         break;
       case 404:
