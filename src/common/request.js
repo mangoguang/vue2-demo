@@ -3,12 +3,14 @@ import axios from 'axios';
 import { localStorageKeys } from '@/common/constants';
 import { Toast } from 'vant';
 import store from '@/store';
-// import reload
+import { reload } from '@/apis/utils'
+import { apiLogin } from '@/apis/common'
+import MD5 from 'crypto-js/md5'
 // import { toLoginPage } from './utils'
 const env = process.env.VUE_APP_ENV;
-const { baseURLMap } = require('../../resource.config');
+const { configMap } = require('../../resource.config');
 
-const { baseURL } = baseURLMap[env];
+const { baseURL } = configMap[env];
 
 const instance = axios.create({
   baseURL,
@@ -41,18 +43,25 @@ instance.interceptors.response.use(
     if (response.data.result === false) console.log(response.data.message);
     return response.data;
   },
-  (error) => {
-    console.log(111111111, error.config)
+  async (error) => {
+    // console.log(111111111, error.config)
     store.commit('SET_LOADING_SHOW', false);
     const responseError = error.response;
     // console.log('请求失败', error, ':::', error.response)
     const { status } = responseError;
     const { data } = responseError;
-    Toast.fail(data.message);
+    // Toast.fail(data.message);
     switch (status) {
       case 401:
-        // let {  } = error.config
-        reload()
+        // 重新登陆
+        const loginData = await apiLogin('guang', { password: MD5('427815').toString(), uuid: '123456' })
+        localStorage.setItem(localStorageKeys.TOKEN, `Bearer ${loginData.data.token}`)
+        // console.log('重新发起请求')
+        let { baseURL, url, data, method } = error.config
+        // console.log(22222222222, { baseURL, url, data }, reload)
+        let reloadResponse = await reload(method, `${baseURL}${url}`, JSON.parse(data))
+        // console.log('重发请求结果', reloadResponse)
+        // return reloadResponse
         // toLoginPage()
         break;
       case 404:

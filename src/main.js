@@ -6,12 +6,23 @@ import router from './router';
 import store from './store';
 import vantCom from '@/common/vant'
 import 'vant/lib/index.css'
+import * as Sentry from '@sentry/vue'
+
+const env = process.env.VUE_APP_ENV;
+const { configMap } = require('../resource.config');
+const { sentryDSN, siteID } = configMap[env]
+
+Sentry.init({
+  Vue: Vue,
+  dsn: sentryDSN,
+  logErrors: true,
+})
 
 const vConsole = new VConsole();
 console.log(vConsole);
 Vue.config.productionTip = false;
 
-Vue.use(ba, '63e92ce1e69792cbb1be60c6f0e0de50');
+Vue.use(ba, siteID);
 
 // 按需引入vant组件
 vantCom.forEach(item => Vue.use(item))

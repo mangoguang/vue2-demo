@@ -22,7 +22,7 @@ export default {
   async mounted() {
     const data = await apiLogin('guang', { password: MD5('427815').toString(), uuid: '123456' })
     localStorage.setItem(localStorageKeys.TOKEN, `Bearer ${data.data.token}`)
-    console.log('?????????????????', data)
+    // console.log('?????????????????', data)
     apiCheckUser('mangoguang', { name: 'guang' })
     localStorage.setItem(localStorageKeys.TOKEN, `Bearer ${data.data.token}1`)
     const res = await apiGetMahjongList({ limit1: 100, page1: 1 }, { isLoading: true })
